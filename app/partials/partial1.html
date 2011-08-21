@@ -1,14 +1,21 @@
-<p>This is the partial for view 1.</p>
-<ul><li ng:repeat="task in tasks_list()">
-    <input type="radio" name="something.current_task_id" value="{{task.id}}"><input name="task.title">
-    <a ng:click="remove(task)">x</a>
-</li></ul>
-
+<div class="panel">
+<directive>I should...</directive>
 <form ng:submit="add_task()">
 <input name="new_task_title">
 <button>Add</button>
 </form>
+<ul class="task_list"><li ng:repeat="task in tasks_list()">
+    <a ng:click="remove(task)">x</a>
+    <input type="checkbox" name="task.done">
+    <label for="list_{{task.id}}" ng:class="something.task_status(task)">
+        <input type="radio" name="something.current_task_id" value="{{task.id}}" id="list_{{task.id}}">
+        {{task.title}}
+    </label>
+</li></ul>
+</div>
 
+<div class="panel" ng:show="current_task">
 <h2><input name="current_task.title"></h2>
 <textarea name="current_task.description"></textarea>
+</div>
 

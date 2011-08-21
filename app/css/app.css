@@ -28,3 +28,13 @@
   content: "";
   padding: 0;
 }
+
+html {font-family:helvetica, arial}
+input, textarea {border:1px solid rgb(240,240,240)}
+.panel {height:100%; width:300px; display:inline-block; vertical-align:top}
+h2 input {font-size:2em; border:none}
+.panel textarea {width:100%}
+directive {color:rgb(180,180,180); font-size:1.5em;}
+.done {color:lightgray}
+
+.task_list {margin:0 1ex}

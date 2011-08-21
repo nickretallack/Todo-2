@@ -3,27 +3,36 @@
     var json_tasks;
     json_tasks = localStorage['tasks'];
     this.tasks = json_tasks ? JSON.parse(json_tasks) : {};
+    this.something = {};
     this.tasks_list = function() {
       return _.values(this.tasks);
     };
     this.remove = function(task) {
+      if (this.something.current_task_id === task.id) {
+        this.something.current_task_id = null;
+      }
       return delete this.tasks[task.id];
     };
-    this.new_task_title = '';
     this.add_task = function() {
-      var id;
-      id = guidGenerator();
-      this.tasks[id] = {
+      var task;
+      task = {
         title: this.new_task_title,
-        id: id
+        id: guidGenerator()
       };
+      this.tasks[task.id] = task;
       return this.new_task_title = '';
     };
-    this.something = {};
-    this.tasks_json = _.debounce(function() {
+    this.save_tasks = _.debounce(function() {
       return localStorage['tasks'] = JSON.stringify(this.tasks);
     }, 500);
-    this.$watch('tasks_json()', function() {});
+    this.something.task_status = function(task) {
+      if (task.done) {
+        return 'done';
+      } else {
+        return 'new';
+      }
+    };
+    this.$watch('save_tasks()', function() {});
     return this.$watch('something.current_task_id', function() {
       return this.current_task = this.tasks[this.something.current_task_id];
     });

@@ -4,6 +4,11 @@
 <input name="new_task_title">
 <button>Add</button>
 </form>
+
+<ul class="search_results"><li ng:repeat="task in tasks_list().$filter(new_task_title)" ng:show="new_task_title">
+    <a ng:click="something.current_task_id = task.id">{{task.title}}</a>
+<li></ul>
+
 <ul class="task_list"><li ng:repeat="task in tasks_list()">
     <a ng:click="remove(task)">x</a>
     <input type="checkbox" name="task.done">

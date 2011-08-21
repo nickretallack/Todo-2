@@ -8,13 +8,13 @@
     this.tasks_list = function() {
       return _.values(this.tasks);
     };
-    this.prerequisite_tasks_list = function() {
+    this.prerequisite_tasks_list = function(parent) {
       var id, _results;
-      if (!this.something.current_task_id) {
+      if (!parent) {
         return [];
       }
       _results = [];
-      for (id in this.current_task.prerequisites) {
+      for (id in parent.prerequisites) {
         _results.push(this.tasks[id]);
       }
       return _results;

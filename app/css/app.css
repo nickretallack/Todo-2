@@ -38,3 +38,4 @@ directive {color:rgb(180,180,180); font-size:1.5em;}
 .done {color:lightgray}
 
 .task_list {margin:0 1ex}
+ul.nested {margin-left:1em}

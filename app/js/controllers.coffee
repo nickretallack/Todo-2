@@ -9,9 +9,9 @@ window.MyCtrl1 = ->
     # actions and aggregates
     @tasks_list = -> _.values(this.tasks)
 
-    @prerequisite_tasks_list = ->
-        return [] unless @something.current_task_id
-        @tasks[id] for id of @current_task.prerequisites
+    @prerequisite_tasks_list = (parent) ->
+        return [] unless parent
+        @tasks[id] for id of parent.prerequisites
 
     @postrequisite_tasks_list = ->
         return [] unless @something.current_task_id

@@ -1,0 +1,11 @@
+    <a ng:click="remove_relationship(task, parent)">x</a>
+    <input type="checkbox" name="task.done">
+    <label for="list_{{task.id}}" ng:class="something.task_status(task)">
+        <input type="radio" name="something.current_task_id" value="{{task.id}}" id="list_{{task.id}}">
+        {{task.title}}
+    </label>
+    
+    <span ng:eval="parent = task">
+    <ul class="nested"><li ng:repeat="task in prerequisite_tasks_list(task)">
+        <ng:include src="'partials/prerequisite.html'"></ng:include>
+    </li></ul>

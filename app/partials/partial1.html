@@ -31,13 +31,10 @@
 <ul class="search_results"><li ng:repeat="task in tasks_list().$filter(new_prerequisite_task_title)" ng:show="new_prerequisite_task_title">
     <a ng:click="add_relationship(task, current_task)">{{task.title}}</a>
 <li></ul>
-<ul class="task_list"><li ng:repeat="task in prerequisite_tasks_list()">
-    <a ng:click="remove_relationship(task, current_task)">x</a>
-    <input type="checkbox" name="task.done">
-    <label for="list_{{task.id}}" ng:class="something.task_status(task)">
-        <input type="radio" name="something.current_task_id" value="{{task.id}}" id="list_{{task.id}}">
-        {{task.title}}
-    </label>
+
+<span ng:eval="parent = current_task"></span>
+<ul class="task_list"><li ng:repeat="task in prerequisite_tasks_list(current_task)">
+    <ng:include src="'partials/prerequisite.html'"></ng:include>
 </li></ul>
 
 <directive>Then I can...</directive>

@@ -1,6 +1,7 @@
 <p>This is the partial for view 1.</p>
-<ul><li ng:repeat="task in tasks">
+<ul><li ng:repeat="task in tasks_list()">
     <input type="radio" name="something.current_task_id" value="{{task.id}}"><input name="task.title">
+    <a ng:click="remove(task)">x</a>
 </li></ul>
 
 <form ng:submit="add_task()">

@@ -13,9 +13,9 @@ window.MyCtrl1 = ->
         return [] unless parent
         @tasks[id] for id of parent.prerequisites
 
-    @postrequisite_tasks_list = ->
-        return [] unless @something.current_task_id
-        @tasks[id] for id of @current_task.postrequisites
+    @postrequisite_tasks_list = (parent) ->
+        return [] unless parent
+        @tasks[id] for id of parent.postrequisites
 
     @remove = (task) -> 
         if @something.current_task_id is task.id 

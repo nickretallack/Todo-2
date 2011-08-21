@@ -19,13 +19,13 @@
       }
       return _results;
     };
-    this.postrequisite_tasks_list = function() {
+    this.postrequisite_tasks_list = function(parent) {
       var id, _results;
-      if (!this.something.current_task_id) {
+      if (!parent) {
         return [];
       }
       _results = [];
-      for (id in this.current_task.postrequisites) {
+      for (id in parent.postrequisites) {
         _results.push(this.tasks[id]);
       }
       return _results;

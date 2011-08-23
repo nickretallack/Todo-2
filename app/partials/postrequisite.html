@@ -2,7 +2,7 @@
 <input type="checkbox" name="task.done">
 <label for="list_{{task.id}}" ng:class="something.task_status(task)">
     <input type="radio" name="something.current_task_id" value="{{task.id}}" id="list_{{task.id}}">
-    {{task.title}} is a child of {{parent.title}}
+    {{task.title}}
 </label>
 
 <span ng:eval="outer_task = task">

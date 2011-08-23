@@ -1,3 +1,5 @@
+dmp = new diff_match_patch()
+
 window.MyCtrl1 = ->
     # load tasks
     json_tasks = localStorage['tasks']
@@ -24,9 +26,7 @@ window.MyCtrl1 = ->
     @add_task = ->
         task = make_task(@new_task_title)
         @new_task_title = ''
-    @save_tasks = _.debounce ->
-        localStorage['tasks'] = JSON.stringify(this.tasks)
-    , 500
+    @old_json_tasks = JSON.stringify(@tasks)
     @something.task_status = (task) ->
         if task.done then 'done' else 'new'
 
@@ -40,6 +40,15 @@ window.MyCtrl1 = ->
         @add_relationship @current_task, task
         @new_postrequisite_task_title = ''
 
+    @associate_prerequisite = (task, current_task) ->
+        @add_relationship task, current_task
+        @new_prerequisite_task_title = ''
+
+    @associate_postrequisite = (current_task, task) ->
+        @add_relationship current_task, task
+        console.log @new_postrequisite_task_title
+        @new_postrequisite_task_title = ''
+
     @add_relationship = (prerequisite, postrequisite) ->
         postrequisite.prerequisites[prerequisite.id] = true
         prerequisite.postrequisites[postrequisite.id] = true
@@ -47,7 +56,6 @@ window.MyCtrl1 = ->
     @remove_relationship = (prerequisite, postrequisite) ->
         delete postrequisite.prerequisites[prerequisite.id]
         delete prerequisite.postrequisites[postrequisite.id]
-        console.debug "DOING IT!", prerequisite, postrequisite
         
     make_task = (title) =>
         task = 
@@ -60,7 +68,13 @@ window.MyCtrl1 = ->
         
     @current_task = null
     # watchers
-    this.$onEval @save_tasks
+    this.$onEval _.debounce ->
+        json_tasks = JSON.stringify(@tasks)
+        localStorage['tasks'] = json_tasks
+        console.log dmp.patch_make @old_json_tasks, json_tasks
+        @old_json_tasks = json_tasks
+    , 500
+
     this.$watch 'something.current_task_id', ->
         @current_task = this.tasks[@something.current_task_id]
 

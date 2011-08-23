@@ -1,5 +1,7 @@
 (function() {
+  var dmp;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  dmp = new diff_match_patch();
   window.MyCtrl1 = function() {
     var json_tasks, make_task;
     json_tasks = localStorage['tasks'];
@@ -41,9 +43,7 @@
       task = make_task(this.new_task_title);
       return this.new_task_title = '';
     };
-    this.save_tasks = _.debounce(function() {
-      return localStorage['tasks'] = JSON.stringify(this.tasks);
-    }, 500);
+    this.old_json_tasks = JSON.stringify(this.tasks);
     this.something.task_status = function(task) {
       if (task.done) {
         return 'done';
@@ -63,14 +63,22 @@
       this.add_relationship(this.current_task, task);
       return this.new_postrequisite_task_title = '';
     };
+    this.associate_prerequisite = function(task, current_task) {
+      this.add_relationship(task, current_task);
+      return this.new_prerequisite_task_title = '';
+    };
+    this.associate_postrequisite = function(current_task, task) {
+      this.add_relationship(current_task, task);
+      console.log(this.new_postrequisite_task_title);
+      return this.new_postrequisite_task_title = '';
+    };
     this.add_relationship = function(prerequisite, postrequisite) {
       postrequisite.prerequisites[prerequisite.id] = true;
       return prerequisite.postrequisites[postrequisite.id] = true;
     };
     this.remove_relationship = function(prerequisite, postrequisite) {
       delete postrequisite.prerequisites[prerequisite.id];
-      delete prerequisite.postrequisites[postrequisite.id];
-      return console.debug("DOING IT!", prerequisite, postrequisite);
+      return delete prerequisite.postrequisites[postrequisite.id];
     };
     make_task = __bind(function(title) {
       var task;
@@ -84,7 +92,12 @@
       return task;
     }, this);
     this.current_task = null;
-    this.$onEval(this.save_tasks);
+    this.$onEval(_.debounce(function() {
+      json_tasks = JSON.stringify(this.tasks);
+      localStorage['tasks'] = json_tasks;
+      console.log(dmp.patch_make(this.old_json_tasks, json_tasks));
+      return this.old_json_tasks = json_tasks;
+    }, 500));
     return this.$watch('something.current_task_id', function() {
       return this.current_task = this.tasks[this.something.current_task_id];
     });

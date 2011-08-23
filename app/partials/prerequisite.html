@@ -2,10 +2,11 @@
 <input type="checkbox" name="task.done">
 <label for="list_{{task.id}}" ng:class="something.task_status(task)">
     <input type="radio" name="something.current_task_id" value="{{task.id}}" id="list_{{task.id}}">
-    {{task.title}} is a child of {{parent.title}}
+    {{task.title}}
 </label>
 
-<span ng:eval="parent = task">
+<span ng:eval="outer_task = task">
 <ul class="nested"><li ng:repeat="task in prerequisite_tasks_list(task)">
+    <span ng:eval="parent = outer_task">
     <ng:include src="'partials/prerequisite.html'"></ng:include>
 </li></ul>

@@ -60,7 +60,7 @@ window.MyCtrl1 = ->
         
     @current_task = null
     # watchers
-    this.$watch 'save_tasks()', ->
+    this.$onEval @save_tasks
     this.$watch 'something.current_task_id', ->
         @current_task = this.tasks[@something.current_task_id]
 

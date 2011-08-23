@@ -84,7 +84,7 @@
       return task;
     }, this);
     this.current_task = null;
-    this.$watch('save_tasks()', function() {});
+    this.$onEval(this.save_tasks);
     return this.$watch('something.current_task_id', function() {
       return this.current_task = this.tasks[this.something.current_task_id];
     });

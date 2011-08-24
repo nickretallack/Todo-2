@@ -1,5 +1,0 @@
-a {text-decoration:none; color:blue; cursor:pointer}
-a:hover {text-derocation:underline}
-label {cursor:pointer}
-
-input, textarea {font:inherit}

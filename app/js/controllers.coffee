@@ -1,4 +1,3 @@
-dmp = new diff_match_patch()
 
 window.MyCtrl1 = ->
     # load tasks
@@ -26,7 +25,6 @@ window.MyCtrl1 = ->
     @add_task = ->
         task = make_task(@new_task_title)
         @new_task_title = ''
-    @old_json_tasks = JSON.stringify(@tasks)
     @something.task_status = (task) ->
         if task.done then 'done' else 'new'
 
@@ -46,7 +44,6 @@ window.MyCtrl1 = ->
 
     @associate_postrequisite = (current_task, task) ->
         @add_relationship current_task, task
-        console.log @new_postrequisite_task_title
         @new_postrequisite_task_title = ''
 
     @add_relationship = (prerequisite, postrequisite) ->
@@ -67,16 +64,29 @@ window.MyCtrl1 = ->
         task
         
     @current_task = null
-    # watchers
+
+
+    // Sync!
+    socket = io.connect '/'
+    dmp = new diff_match_patch()
+    @old_json_tasks = JSON.stringify @tasks
     this.$onEval _.debounce ->
-        json_tasks = JSON.stringify(@tasks)
-        localStorage['tasks'] = json_tasks
-        console.log dmp.patch_make @old_json_tasks, json_tasks
+        json_tasks = JSON.stringify @tasks
+        #localStorage['tasks'] = json_tasks
+        patch = dmp.patch_make @old_json_tasks, json_tasks
+        if patch.length
+            socket.emit 'patch', patch
         @old_json_tasks = json_tasks
     , 500
+
+    socket.on 'patch', (patch) =>
+        json_tasks = @old_json_tasks = dmp.patch_apply(patch, JSON.stringify @tasks)[0]
+        @tasks = JSON.parse json_tasks
+        @$eval()
 
     this.$watch 'something.current_task_id', ->
         @current_task = this.tasks[@something.current_task_id]
 
+    
 
 window.MyCtrl2 = ->

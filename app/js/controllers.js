@@ -1,7 +1,8 @@
 (function() {
-  var dmp;
+  var dmp, socket;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   dmp = new diff_match_patch();
+  socket = io.connect('/');
   window.MyCtrl1 = function() {
     var json_tasks, make_task;
     json_tasks = localStorage['tasks'];
@@ -93,11 +94,21 @@
     }, this);
     this.current_task = null;
     this.$onEval(_.debounce(function() {
+      var patch;
       json_tasks = JSON.stringify(this.tasks);
-      localStorage['tasks'] = json_tasks;
-      console.log(dmp.patch_make(this.old_json_tasks, json_tasks));
+      patch = dmp.patch_make(this.old_json_tasks, json_tasks);
+      if (patch.length) {
+        console.log("sending", patch);
+        socket.emit('patch', JSON.stringify(patch));
+      }
       return this.old_json_tasks = json_tasks;
     }, 500));
+    socket.on('patch', __bind(function(patch) {
+      patch = JSON.parse(patch);
+      json_tasks = this.old_json_tasks = dmp.patch_apply(patch, JSON.stringify(this.tasks))[0];
+      this.tasks = JSON.parse(json_tasks);
+      return this.$eval();
+    }, this));
     return this.$watch('something.current_task_id', function() {
       return this.current_task = this.tasks[this.something.current_task_id];
     });

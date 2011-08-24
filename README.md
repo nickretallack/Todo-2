@@ -1,3 +1,5 @@
+This project uses...
+
 # angular-seed — the seed for &lt;angular/&gt; apps
 
 This project is an application skeleton for a typical [angular](http://angularjs.org/) web app. You
